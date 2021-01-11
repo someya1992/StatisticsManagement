@@ -25,7 +25,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 
 	@ExceptionHandler(InvalidEventException.class)
 	public ResponseEntity<Object> handleTransactionInvalidException(InvalidEventException exception) {
-		return new ResponseEntity<>("Old Event", HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(exception.getMessage(), HttpStatus.NO_CONTENT);
+	}
+	
+
+	@ExceptionHandler(MissingEventsException.class)
+	public ResponseEntity<Object> handleTransactionMissingEventsException(MissingEventsException exception) {
+		return new ResponseEntity<>("No events for last 60 seconds", HttpStatus.NO_CONTENT);
 	}
 	
 	@Override
@@ -36,7 +42,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
 		body.put("timestamp", new Date());
 		body.put("status", status.value());
 
-		// Get all errors
 		List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage())
 				.collect(Collectors.toList());
 

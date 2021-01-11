@@ -1,24 +1,23 @@
 package com.stats.controller;
 
+import static java.math.BigDecimal.valueOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.stats.Controller.StatisticsController;
-import com.stats.DTO.EventDTO;
+import com.stats.DTO.StatisticsDTO;
+import com.stats.Exception.MissingEventsException;
 import com.stats.service.StatisticsService;
-
 
 @WebMvcTest(value = StatisticsController.class)
 public class StatisticsControllerTest {
@@ -30,20 +29,35 @@ public class StatisticsControllerTest {
 	private StatisticsService service;
 
 	@Test
-	public void getStats() throws Exception {	
-		when(service.getStats()).thenReturn(null);
-		MvcResult mvcResult =this.mockMvc.perform(get("/stats")).andExpect(status().isOk()).andReturn();
-		assertEquals(mvcResult.getResponse().getContentType(),null);
-
+	public void getStats_statsPresent_successful() throws Exception {
+		when(service.getStats())
+				.thenReturn(new StatisticsDTO(3, valueOf(0.09876543212), valueOf(0.09876543212), 5L, 2.5d));
+		MvcResult mvcResult = this.mockMvc.perform(get("/stats")).andExpect(status().isOk()).andReturn();
+		String response[] = mvcResult.getResponse().getContentAsString().split(",");
+		assertEquals(Integer.valueOf(response[0]), 3);
 	}
-	
+
 	@Test
-	public void addEvents() throws Exception {	
-		MvcResult mvcResult =this.mockMvc.perform(post("/events")).andDo(print()).andReturn();
-		assertEquals(mvcResult.getResponse().getStatus(),status().isOk());
+	public void getStats_statsMissing_unsuccessful() throws Exception {
+		when(service.getStats()).thenThrow(MissingEventsException.class);
+		this.mockMvc.perform(get("/stats")).andExpect(status().isNoContent());
+	}
+
+	@Test
+	public void addEvents_InvalidEvent_unsuccessful() throws Exception {
+		String invalidData = "null,null,null";
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/event").content(invalidData))
+				.andExpect(status().isNoContent());
 
 	}
-	
-	
+
+	@Test
+	public void addEvents_validEvent_successful() throws Exception {
+		Long timeStamp = System.currentTimeMillis();
+		String invalidData = timeStamp + ",0.1234567890,23456789";
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/event").content(invalidData))
+				.andExpect(status().isAccepted());
+
+	}
 
 }
