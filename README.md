@@ -41,7 +41,7 @@
 
  #### Building and running the project
 
- 1. `mvn clean` and `mvn package`
+ 1. `mvn clean` and `mvn install`
  
  2.  In the target folder executable jar is created, Run as
      `java -jar <jar_name>.jar`
