@@ -12,7 +12,7 @@ public class EventsUtil {
 
 	public static boolean isInvalidEvent(Long eventTimestamp) {
 		long timeDiff = System.currentTimeMillis() - eventTimestamp;
-		return  (timeDiff> MAX_ALLOWED_IN_MILLI_SECONDS) || (timeDiff <0) ;
+		return (timeDiff > MAX_ALLOWED_IN_MILLI_SECONDS) || (timeDiff < 0);
 	}
 
 	public static EventDTO convertToDTO(String event) throws InvalidEventException {

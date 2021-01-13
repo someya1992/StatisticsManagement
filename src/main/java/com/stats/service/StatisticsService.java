@@ -33,7 +33,7 @@ public class StatisticsService {
 		}
 		statisticDAO.addEvent(event);
 	}
-	
+
 	private StatisticsDTO calculateStats(List<EventDTO> eventList) throws MissingEventsException {
 		LongSummaryStatistics Ystat = eventList.stream().mapToLong(value -> value.getY()).summaryStatistics();
 		if (Long.compare(Ystat.getCount(), 0) == 0) {
@@ -43,6 +43,5 @@ public class StatisticsService {
 		BigDecimal Xavg = Xsum.divide(new BigDecimal(Ystat.getCount()), 10, RoundingMode.CEILING);
 		return new StatisticsDTO((int) Ystat.getCount(), Xsum, Xavg, Ystat.getSum(), Ystat.getAverage());
 	}
-
 
 }
