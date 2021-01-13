@@ -8,10 +8,11 @@ import com.stats.Exception.InvalidEventException;
 
 public class EventsUtil {
 
-	public static final int MAX_ALLOWED_IN_MILLI_SECONDS = 6000;
+	public static final int MAX_ALLOWED_IN_MILLI_SECONDS = 60000;
 
-	public static boolean isValidEvent(Long eventTimestamp) {
-		return System.currentTimeMillis() - eventTimestamp > MAX_ALLOWED_IN_MILLI_SECONDS;
+	public static boolean isInvalidEvent(Long eventTimestamp) {
+		long timeDiff = System.currentTimeMillis() - eventTimestamp;
+		return  (timeDiff> MAX_ALLOWED_IN_MILLI_SECONDS) || (timeDiff <0) ;
 	}
 
 	public static EventDTO convertToDTO(String event) throws InvalidEventException {

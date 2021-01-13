@@ -22,10 +22,10 @@ public class StatisticsDAO {
 		}
 	}
 
-	@Scheduled(fixedRate = 6000, initialDelay = 6000)
+	@Scheduled(fixedRate = 1000, initialDelay = 6000)
 	public void clearOld() {
 		synchronized (lock) {
-			EVENT_LIST.removeIf(event -> (EventsUtil.isValidEvent(event.getTimeStamp())));
+			EVENT_LIST.removeIf(event -> (EventsUtil.isInvalidEvent(event.getTimeStamp())));
 		}
 	}
 

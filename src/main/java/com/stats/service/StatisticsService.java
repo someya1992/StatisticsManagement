@@ -28,8 +28,8 @@ public class StatisticsService {
 	}
 
 	public void addEvent(EventDTO event) throws InvalidEventException {
-		if (EventsUtil.isValidEvent(event.getTimeStamp())) {
-			throw new InvalidEventException("Event has old timestamp");
+		if (EventsUtil.isInvalidEvent(event.getTimeStamp())) {
+			throw new InvalidEventException("Event has old timestamp : more than 60 seconds");
 		}
 		statisticDAO.addEvent(event);
 	}
