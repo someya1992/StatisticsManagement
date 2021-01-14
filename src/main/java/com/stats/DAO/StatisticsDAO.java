@@ -14,7 +14,7 @@ import com.stats.util.EventsUtil;
 public class StatisticsDAO {
 
 	private static final List<EventDTO> EVENT_LIST = new ArrayList<>();
-	private Object lock = new Object();
+	 private static final Object lock = new Object();
 
 	public void addEvent(EventDTO event) throws InvalidEventException {
 		synchronized (lock) {
