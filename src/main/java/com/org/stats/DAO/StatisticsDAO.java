@@ -1,5 +1,5 @@
 package com.org.stats.DAO;
-
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class StatisticsDAO {
 
     private static final List<EventDTO> eventList = new ArrayList<>();
     private final StatisticsCalculator statisticsCalculator;
-    private StatisticsDTO stats;
+    private StatisticsDTO stats = new StatisticsDTO(0, BigDecimal.ZERO,BigDecimal.ZERO,0,0);
     private static final Object lock = new Object();
 
     public void addEvent(EventDTO event) {
