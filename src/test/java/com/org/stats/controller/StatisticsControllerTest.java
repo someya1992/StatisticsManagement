@@ -54,13 +54,5 @@ public class StatisticsControllerTest {
 
 	}
 
-	@Test
-	public void addEvents_FutureEvent_successful() throws Exception {
-		Long timeStamp = System.currentTimeMillis() + 90000;
-		String invalidData = timeStamp + ",0.1234567890,23456789";
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/event").content(invalidData))
-				.andExpect(status().isNoContent());
-
-	}
 
 }
