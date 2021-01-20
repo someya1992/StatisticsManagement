@@ -1,4 +1,4 @@
-package com.stats.Exception;
+package com.org.stats.Exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +16,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(InvalidEventException.class)
 	public ResponseEntity<Object> handleTransactionInvalidException(InvalidEventException exception) {
 		return new ResponseEntity<>(exception.getMessage(), HttpStatus.NO_CONTENT);
-	}
-
-	@ExceptionHandler(MissingEventsException.class)
-	public ResponseEntity<Object> handleTransactionMissingEventsException(MissingEventsException exception) {
-		return new ResponseEntity<>("No events for last 60 seconds", HttpStatus.NO_CONTENT);
 	}
 
 }

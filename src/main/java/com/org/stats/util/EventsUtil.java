@@ -1,22 +1,22 @@
-package com.stats.util;
+package com.org.stats.util;
 
 import java.math.BigDecimal;
 
-import com.stats.DTO.EventDTO;
-import com.stats.DTO.StatisticsDTO;
-import com.stats.Exception.InvalidEventException;
+import com.org.stats.DTO.EventDTO;
+import com.org.stats.DTO.StatisticsDTO;
+import com.org.stats.Exception.InvalidEventException;
 
 public class EventsUtil {
 
 	public static final int MAX_ALLOWED_IN_MILLI_SECONDS = 60000;
 
-	public static boolean isInvalidEvent(Long eventTimestamp) {
+	public static boolean isExpired(Long eventTimestamp) {
 		long timeDiff = System.currentTimeMillis() - eventTimestamp;
 		return (timeDiff > MAX_ALLOWED_IN_MILLI_SECONDS) || (timeDiff < 0);
 	}
 
 	public static EventDTO convertToDTO(String event) throws InvalidEventException {
-		String eventPayload[] = event.split(",");
+		String[] eventPayload = event.split(",");
 		if ((eventPayload[0].equals("null") || (eventPayload[1].equals("null")) || (eventPayload[2].equals("null")))) {
 			throw new InvalidEventException("Not Valid Data");
 		}
@@ -31,8 +31,8 @@ public class EventsUtil {
 		int total = stats.getTotal();
 		BigDecimal sumX = stats.getSumX();
 		BigDecimal avgX = stats.getAvgX();
-		Long sumY = stats.getSumY();
-		Double avgY = stats.getAvgY();
+		long sumY = stats.getSumY();
+		double avgY = stats.getAvgY();
 		return total + "," + sumX + "," + avgX + "," + sumY + "," + avgY;
 	}
 

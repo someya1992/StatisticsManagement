@@ -1,4 +1,4 @@
-package com.stats.DTO;
+package com.org.stats.DTO;
 
 import java.math.BigDecimal;
 

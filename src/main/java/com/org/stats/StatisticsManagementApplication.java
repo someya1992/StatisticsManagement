@@ -1,4 +1,4 @@
-package com.stats;
+package com.org.stats;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

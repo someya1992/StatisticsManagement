@@ -1,4 +1,4 @@
-package com.stats.controller;
+package com.org.stats.controller;
 
 import static java.math.BigDecimal.valueOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,10 +14,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.stats.Controller.StatisticsController;
-import com.stats.DTO.StatisticsDTO;
-import com.stats.Exception.MissingEventsException;
-import com.stats.service.StatisticsService;
+import com.org.stats.Controller.StatisticsController;
+import com.org.stats.DTO.StatisticsDTO;
+import com.org.stats.service.StatisticsService;
 
 @WebMvcTest(value = StatisticsController.class)
 public class StatisticsControllerTest {
@@ -33,15 +32,10 @@ public class StatisticsControllerTest {
 		when(service.getStats())
 				.thenReturn(new StatisticsDTO(3, valueOf(0.09876543212), valueOf(0.09876543212), 5L, 2.5d));
 		MvcResult mvcResult = this.mockMvc.perform(get("/stats")).andExpect(status().isOk()).andReturn();
-		String response[] = mvcResult.getResponse().getContentAsString().split(",");
+		String[] response = mvcResult.getResponse().getContentAsString().split(",");
 		assertEquals(Integer.valueOf(response[0]), 3);
 	}
 
-	@Test
-	public void getStats_statsMissing_unsuccessful() throws Exception {
-		when(service.getStats()).thenThrow(MissingEventsException.class);
-		this.mockMvc.perform(get("/stats")).andExpect(status().isNoContent());
-	}
 
 	@Test
 	public void addEvents_InvalidEvent_unsuccessful() throws Exception {
@@ -57,6 +51,15 @@ public class StatisticsControllerTest {
 		String invalidData = timeStamp + ",0.1234567890,23456789";
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/event").content(invalidData))
 				.andExpect(status().isAccepted());
+
+	}
+
+	@Test
+	public void addEvents_FutureEvent_successful() throws Exception {
+		Long timeStamp = System.currentTimeMillis() + 90000;
+		String invalidData = timeStamp + ",0.1234567890,23456789";
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/event").content(invalidData))
+				.andExpect(status().isNoContent());
 
 	}
 
